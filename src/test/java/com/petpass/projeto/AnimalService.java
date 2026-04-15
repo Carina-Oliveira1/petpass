@@ -3,6 +3,7 @@ package com.petpass.projeto.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.petpass.projeto.model.Animal;
+import com.petpass.projeto.model.Usuario;
 import com.petpass.projeto.repository.AnimalRepository;
 import com.petpass.projeto.expections.CamposObrigatoriosException;
 
@@ -20,10 +21,15 @@ public class AnimalService {
                 animal.getRaca() == null || animal.getRaca().trim().isEmpty() ||
                 animal.getDataNascimento() == null) {
                     throw new CamposObrigatoriosException("Nome, RG, Raça e Data de Nascimento são obrigatórios!");
-                }                
-                animal.calcularIdadeEClassificacao();
+            }
+                
+            if(animal.getUsuario() == null){
+                throw new CamposObrigatoriosException("O animal deve estar vinculado obrigatoriamente a um tutor (usuário)!");
+            }
 
-                return animalRepository.save(animal);
+            animal.calcularIdadeEClassificacao();
+
+            return animalRepository.save(animal);
         } catch (CamposObrigatoriosException e) {
             throw e;
         } catch (Exception e) {
