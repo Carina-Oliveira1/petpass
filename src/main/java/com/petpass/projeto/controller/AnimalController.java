@@ -12,13 +12,13 @@ public class AnimalController {
     @Autowired
     private AnimalService animalService;
 
-    // 📌 Cadastro: Agora recebe o ID do Tutor na URL para não deixar o pet órfão
+    // cadastro: recebe o ID do Tutor na URL para não deixar o pet órfão
     @PostMapping("/usuarios/{tutorId}")
     public Animal realizarCadastro(@PathVariable Long tutorId, @RequestBody Animal novoAnimal) {
         return animalService.cadastrar(tutorId, novoAnimal);
     }
 
-    // 📌 Atualização do Animal
+    // atualização do Animal
     @PatchMapping("/{id}")
     public Animal atualizar(@PathVariable Long id, @RequestBody Animal dados) {
         return animalService.atualizarAnimal(id, dados);

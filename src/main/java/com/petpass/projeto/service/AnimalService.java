@@ -18,14 +18,13 @@ public class AnimalService {
     @Autowired
     private UsuarioRepository usuarioRepository; // Precisamos disso para achar o dono
 
-    // 📌 CADASTRAR ANIMAL
+    // cadastrar animal
     public Animal cadastrar(Long tutorId, Animal animal) {
         
-        // 1. Busca o tutor. Se não achar, trava o cadastro.
+        // busca o tutor. de não achar, trava o cadastro.
         Usuario tutor = usuarioRepository.findById(tutorId)
             .orElseThrow(() -> new RuntimeException("Tutor não encontrado com o ID informado!"));
 
-        // 2. Validações do Membro 2 corrigidas
         if(animal == null || 
             animal.getNome() == null || animal.getNome().trim().isEmpty() || 
             animal.getRg() == null || animal.getRg().trim().isEmpty() ||
@@ -34,20 +33,19 @@ public class AnimalService {
                 throw new CamposObrigatoriosException("Nome, RG, Raça e Data de Nascimento são obrigatórios!");
         }
         
-        // 3. Regra de negócio nativa
         animal.calcularIdadeEClassificacao();
 
-        // 4. Salva o animal
+        // salva o animal
         Animal animalSalvo = animalRepository.save(animal);
 
-        // 5. Vincula o animal à lista do tutor e salva o tutor
+        // vincula o animal à lista do tutor e salva o tutor
         tutor.adicionarAnimal(animalSalvo);
         usuarioRepository.save(tutor);
 
         return animalSalvo;
     }
 
-    // 📌 ATUALIZAR ANIMAL
+    // atualizar animal
     public Animal atualizarAnimal(Long id, Animal dados) {
         Animal animal = animalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
@@ -56,7 +54,7 @@ public class AnimalService {
         animal.setTemMicroship(dados.isTemMicroship());
         animal.setHistoricoVacina(dados.getHistoricoVacina());
 
-        // Gatilho obrigatório da data de nascimento
+        // gatilho obrigatório da data de nascimento
         if (dados.getDataNascimento() != null &&
             !Objects.equals(dados.getDataNascimento(), animal.getDataNascimento())) {
 
