@@ -10,7 +10,7 @@ import java.util.List;
 public class Usuario {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 💡 Auto-incremento do ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-incremento do ID
     private Long id;
 
     private String nome;
