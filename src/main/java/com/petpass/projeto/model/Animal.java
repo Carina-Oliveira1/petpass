@@ -33,6 +33,12 @@ public class Animal {
 
     public Animal() {}
 
+    public Animal(String nome, String raca, LocalDate dataNascimento) {
+        this.nome = nome;
+        this.raca = raca;
+        this.dataNascimento = dataNascimento;
+    }
+
     public void calcularIdadeEClassificacao() {
         if (this.dataNascimento != null) {
             this.idade = Period.between(this.dataNascimento, LocalDate.now()).getYears();
