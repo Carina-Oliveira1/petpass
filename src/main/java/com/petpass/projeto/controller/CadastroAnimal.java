@@ -4,19 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.petpass.projeto.service.AnimalService;
 import org.springframework.web.bind.annotation.*;
 import com.petpass.projeto.model.Animal;
-import com.petpass.projeto.model.Usuario;
 
 @RestController
 @RequestMapping("/animais")
-public class AnimalController {
+public class CadastroAnimal {
 
     @Autowired
     private AnimalService animalService;
 
     @PostMapping
-    public Animal realizarCadastro(@RequestBody Animal novoAnimal) {        
+    public Animal realizarCadastro(@RequestBody Animal novoAnimal) {
+        novoAnimal.calcularIdadeEClassificacao();
 
-        System.out.println("Nome do tutor: " + novoAnimal.getUsuario());
         System.out.println("Cadastrando animal: " + novoAnimal.getNome());
         System.out.println("RG: " + novoAnimal.getRg());
         System.out.println("Raça: " + novoAnimal.getRaca());

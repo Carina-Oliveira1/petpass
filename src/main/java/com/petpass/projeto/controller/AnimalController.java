@@ -10,10 +10,17 @@ import org.springframework.web.bind.annotation.*;
 public class AnimalController {
 
     @Autowired
-    private AnimalService service;
+    private AnimalService animalService;
 
+    // 📌 Cadastro: Agora recebe o ID do Tutor na URL para não deixar o pet órfão
+    @PostMapping("/usuarios/{tutorId}")
+    public Animal realizarCadastro(@PathVariable Long tutorId, @RequestBody Animal novoAnimal) {
+        return animalService.cadastrar(tutorId, novoAnimal);
+    }
+
+    // 📌 Atualização do Animal
     @PatchMapping("/{id}")
     public Animal atualizar(@PathVariable Long id, @RequestBody Animal dados) {
-        return service.atualizarAnimal(id, dados);
+        return animalService.atualizarAnimal(id, dados);
     }
 }

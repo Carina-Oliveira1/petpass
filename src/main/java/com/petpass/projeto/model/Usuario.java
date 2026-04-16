@@ -3,12 +3,15 @@ package com.petpass.projeto.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Usuario{
     
     //atributos da classe
     private String nome;
     private String email;
     private String telefone; //é string pra manter a formatação
+    @JsonIgnore //evita que a senha seja enviada de volta para o front end
     private String senha;
     private String localizacao;
     private String fotoPerfil; //guarda só o link da imagem
