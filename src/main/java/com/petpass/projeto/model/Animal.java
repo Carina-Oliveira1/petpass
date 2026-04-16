@@ -25,7 +25,7 @@ public class Animal {
     private String historicoVacina;
     private String classificacao;
 
-    // dchave estrangeira do banco, lga o pet ao dono.
+    // chave estrangeira do banco, liga o pet ao dono.
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     @JsonIgnore // evita um loop infinito na hora de gerar o JSON no Postman
