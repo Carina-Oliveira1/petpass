@@ -1,11 +1,18 @@
 package com.petpass.projeto.model;
 
+import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.time.Period;
 
-public class Animal{
+@Entity
+@Table(name = "animais")
+public class Animal {
 
-    //atributos da classe
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String nome;
     private String foto;
     private Integer idade;
@@ -16,113 +23,69 @@ public class Animal{
     private boolean ehCastrado;
     private boolean temMicroship;
     private String historicoVacina;
-    private String classificacao; //filhote, adulto ou idoso
+    private String classificacao;
 
-    public Animal(){
+    // dchave estrangeira do banco, lga o pet ao dono.
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    @JsonIgnore // evita um loop infinito na hora de gerar o JSON no Postman
+    private Usuario usuario;
 
+    public Animal() {}
+
+    public void calcularIdadeEClassificacao() {
+        if (this.dataNascimento != null) {
+            this.idade = Period.between(this.dataNascimento, LocalDate.now()).getYears();
+        }
+
+        if (this.idade != null) {
+            if (this.idade < 1) {
+                this.classificacao = "Filhote";
+            } else if (this.idade >= 1 && this.idade < 8) {
+                this.classificacao = "Adulto";
+            } else {
+                this.classificacao = "Idoso";
+            }
+        }
     }
 
-    public void calcularIdadeEClassificacao(){
-        if(this.dataNascimento != null){
-            LocalDate hoje = LocalDate.now();
-            this.idade = Period.between(this.dataNascimento, hoje).getYears();
-        }
+    // --- GETTERS E SETTERS ---
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-        if(this.idade < 1){
-            this.classificacao = "Filhote";
-        } else if(this.idade >= 1 && this.idade < 8){
-            this.classificacao = "Adulto";
-        } else{
-            this.classificacao = "Idoso";
-        }
-    }
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 
-        public String getNome(){
-            return nome;
-        }
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
 
-        public void setNome(String nome){
-            this.nome = nome;
-        }
+    public String getFoto() { return foto; }
+    public void setFoto(String foto) { this.foto = foto; }
 
-        public String getFoto(){
-            return foto;
-        }
+    public Integer getIdade() { return idade; }
+    public void setIdade(Integer idade) { this.idade = idade; }
 
-        public void setFoto(String foto){
-            this.foto = foto;
-        }
+    public LocalDate getDataNascimento() { return dataNascimento; }
+    public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
 
-        public Integer getIdade(){
-            return idade;
-        }
+    public String getRg() { return rg; }
+    public void setRg(String rg) { this.rg = rg; }
 
-        public void setIdade(Integer idade){
-            this.idade = idade;
-        }
+    public String getEspecie() { return especie; }
+    public void setEspecie(String especie) { this.especie = especie; }
 
-        public LocalDate getDataNascimento(){
-            return dataNascimento;
-        }
+    public String getRaca() { return raca; }
+    public void setRaca(String raca) { this.raca = raca; }
 
-        public void setDataNascimento(LocalDate dataNascimento){
-            this.dataNascimento = dataNascimento;
-        }
+    public boolean isEhCastrado() { return ehCastrado; }
+    public void setEhCastrado(boolean ehCastrado) { this.ehCastrado = ehCastrado; }
 
-        public String getRg(){
-            return rg;
-        }
+    public boolean isTemMicroship() { return temMicroship; }
+    public void setTemMicroship(boolean temMicroship) { this.temMicroship = temMicroship; }
 
-        public void setRg(String rg){
-            this.rg = rg;
-        }
+    public String getHistoricoVacina() { return historicoVacina; }
+    public void setHistoricoVacina(String historicoVacina) { this.historicoVacina = historicoVacina; }
 
-        public String getEspecie(){
-            return especie;
-        }
-
-        public void setEspecie(String especie){
-            this.especie = especie;
-        }
-
-        public String getRaca(){
-            return raca;
-        }
-
-        public void setRaca(String raca){
-            this.raca = raca;
-        }
-
-        public boolean isEhCastrado(){
-            return ehCastrado;
-        }
-
-        public void setEhCastrado(boolean ehCastrado){
-            this.ehCastrado = ehCastrado;
-        }
-
-        public boolean isTemMicroship(){
-            return temMicroship;
-        }
-
-        public void setTemMicroship(boolean temMicroship){
-            this.temMicroship = temMicroship;
-        }
-
-        public String getHistoricoVacina(){
-            return historicoVacina;
-        }
-
-        public void setHistoricoVacina(String historicoVacina){
-            this.historicoVacina = historicoVacina;
-        }
-
-        public String getClassificacao(){
-            return classificacao;
-        }
-
-        public void setClassificacao(String classificacao){
-            this.classificacao = classificacao;
-        }
-
+    public String getClassificacao() { return classificacao; }
+    public void setClassificacao(String classificacao) { this.classificacao = classificacao; }
 }
