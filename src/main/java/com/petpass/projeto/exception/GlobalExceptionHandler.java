@@ -49,4 +49,13 @@ public class GlobalExceptionHandler {
             HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
+
+    // Captura o erro da data de nascimento maior que a data atual
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse> handleArgumentoInvalido(IllegalArgumentException e) {
+        return new ResponseEntity<>(
+            new ApiResponse(400, e.getMessage()),
+            HttpStatus.BAD_REQUEST
+        );
+    }
 }

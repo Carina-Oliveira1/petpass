@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.petpass.projeto.model.Usuario;
 import com.petpass.projeto.repository.UsuarioRepository;
+import com.petpass.projeto.thread.EnvioEmailBoasVindas;
 import com.petpass.projeto.exception.*;
 import com.petpass.projeto.dto.AlterarSenhaDTO; // Nosso DTO de proteção
 
@@ -44,9 +45,17 @@ public class UsuarioService {
                 );
             }
 
-            // criptografa antes de salvar
+            // Criptografa a senha antes de salvar no banco
             usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-            return usuarioRepository.save(usuario);
+            
+            // Salva no banco e guarda na variável usuarioSalvo
+            Usuario usuarioSalvo = usuarioRepository.save(usuario);
+
+            // Dispara a thread de boas-vindas
+            new EnvioEmailBoasVindas(usuarioSalvo).start();
+
+            // Retorna o usuário criado
+            return usuarioSalvo;
 
         } catch (CamposObrigatoriosException | SenhaInvalidaException | EmailJaCadastradoException e) {
             throw e;

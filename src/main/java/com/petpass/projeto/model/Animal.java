@@ -41,6 +41,11 @@ public class Animal {
 
     public void calcularIdadeEClassificacao() {
         if (this.dataNascimento != null) {
+            // Impede datas inválidas (exception)
+            if (this.dataNascimento.isAfter(LocalDate.now())) {
+                throw new IllegalArgumentException("A data de nascimento do pet não pode estar no futuro!");
+            }
+            
             this.idade = Period.between(this.dataNascimento, LocalDate.now()).getYears();
         }
 
